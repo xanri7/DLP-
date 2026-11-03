@@ -11,22 +11,37 @@ The project is designed as a simple client-server application:
 
 ```text
 agent/
-  main.py                 # Agent entry point
-  monitor.py              # File-event monitoring boundary
-  pipeline.py             # Connects inspection, policy, and enforcement
-  enforcement.py           # Enforcement adapter boundary
+  main.py
+  pipeline.py
+  channels/
+    base.py                # Shared channel interface
+    clipboard.py           # Clipboard channel
+    usb.py                 # USB extraction channel
   detection/
-    scanner.py             # File inspection
-    rules.py               # Sensitive-data detection rules
+    scanner.py
+    rules.py
   policy/
-    engine.py              # ALLOW / WARN / BLOCK decisions
+    engine.py              # Evaluates locally cached policies
+    cache.py               # Local versioned policy cache
+  sync/
+    client.py              # Server communication
+    local_store.py         # Offline cache and event queue
 server/
-  app.py                   # Flask application
-  routes.py                # API and dashboard routes
-  storage.py               # Event persistence
-  templates/index.html     # Dashboard page
-  static/css/style.css     # Dashboard styles
-  static/js/dashboard.js   # Dashboard behavior
+  app.py
+  routes/
+    policies.py            # Policy API
+    events.py               # Event API
+    agents.py               # Agent heartbeat API
+  policy/
+    manager.py              # Central policy management
+    store.py                # Authoritative policy storage
+  database/
+    events.py               # Event persistence
+  services/
+    synchronization.py
+    authentication.py
+  templates/                # Dashboard templates
+  static/                   # Dashboard CSS and JavaScript
 common/
   schemas.py               # Shared event and result structures
 tests/
@@ -36,6 +51,16 @@ tests/
 docs/
   architecture.md
 ```
+
+## Architecture
+
+The project uses a modular Windows endpoint agent and a central Linux server:
+- **Monitoring channels:** the initial channels are clipboard and USB. Each channel is an adapter that feeds the shared DLP pipeline.
+- **Policy authority:** policy creation, editing, versioning, and central storage belong to the server.
+- **Agent policy cache:** the agent downloads versioned policies and keeps a local cache for offline operation; it does not manage policies.
+- **Synchronization:** the agent checks policy versions, uploads events, sends heartbeats, and queues events locally while offline.
+
+See [docs/architecture-v2.md](docs/architecture-v2.md) for the data flow and API outline.
 
 ## Current status
 
