@@ -4,7 +4,6 @@ DECISIONS = {"ALLOW", "WARN", "BLOCK"}
 SEVERITIES = {"low", "medium", "high", "critical"}
 ENFORCEMENT_STATUSES = {"SUCCESS", "FAILED", "NOT_REQUIRED"}
 POLICY_STATUSES = {"enabled", "disabled"}
-EVENT_TYPES = {"clipboard_change", "file_copy", "file_access"}
 
 def make_detection_result(findings):
     return {"sensitive": bool(findings), "findings": findings}
@@ -21,22 +20,18 @@ def validate_policy_document(document):
     policies = document.get("policies")
     if not isinstance(policies, list):
         raise ValueError("Policy document requires a policies array")
-    ids = set()
+    seen = set()
     for policy in policies:
-        if not isinstance(policy, dict):
-            raise ValueError("Each policy must be an object")
         required = {"id", "name", "enabled", "channel", "conditions", "action"}
-        if not required.issubset(policy):
-            raise ValueError(f"Policy is missing fields: {sorted(required - set(policy))}")
-        if policy["id"] in ids:
-            raise ValueError(f"Duplicate policy id: {policy['id']}")
-        ids.add(policy["id"])
-        if policy["channel"] not in CHANNELS:
-            raise ValueError(f"Unsupported channel: {policy['channel']}")
-        if policy["action"] not in DECISIONS:
-            raise ValueError(f"Unsupported action: {policy['action']}")
+        if not isinstance(policy, dict) or not required.issubset(policy):
+            raise ValueError("Policy is missing required fields")
+        if policy["id"] in seen:
+            raise ValueError("Duplicate policy id")
+        seen.add(policy["id"])
+        if policy["channel"] not in CHANNELS or policy["action"] not in DECISIONS:
+            raise ValueError("Unsupported channel or action")
         if not isinstance(policy["enabled"], bool) or not isinstance(policy["conditions"], dict):
-            raise ValueError("enabled must be boolean and conditions must be an object")
+            raise ValueError("Invalid enabled or conditions value")
     return document
 
 def validate_event(event):
