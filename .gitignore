@@ -4,5 +4,5 @@ __pycache__/
 venv/
 .env
 .pytest_cache/
-agent/policy_cache.json
+agent/policies_cache.json
 server/policies.json.tmp

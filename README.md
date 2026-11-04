@@ -1,43 +1,41 @@
 # DLP
 
-A small Data Loss Prevention project with two parts:
+A first prototype of a Data Loss Prevention system.
 
-- **Agent** — runs on Windows and monitors clipboard and USB activity.
-- **Server** — manages policies and provides the web dashboard.
+## Components
 
-The server is the source of truth for policies. The agent keeps a local JSON cache so it can use the latest valid policies while offline.
+- **Agent:** monitors clipboard changes and removable-drive connection events on Windows.
+- **Detection:** checks clipboard text locally for basic sensitive-data patterns. Raw content is not sent to the server.
+- **Policy:** downloads policies from the server and keeps a local JSON cache for offline use.
+- **Server:** stores policies, receives agent events, and serves a basic dashboard.
 
-## Project structure
-
-```text
-agent/
-  main.py
-  clipboard.py
-  usb.py
-  policy_cache.py
-server/
-  app.py
-  policies.json
-  templates/
-    index.html
-  static/
-    style.css
-    app.js
-requirements.txt
-```
-
-## Setup
+## Run the server
 
 ```bash
 python -m venv .venv
-# Activate the virtual environment
 pip install -r requirements.txt
-```
-
-Run the server:
-
-```bash
 python -m server.app
 ```
 
-Clipboard and USB monitoring are initial development targets. Additional monitoring channels can be added as separate agent modules.
+Open http://127.0.0.1:5000.
+
+## Run the agent
+
+In a second terminal:
+
+```bash
+set DLP_SERVER_URL=http://127.0.0.1:5000
+python -m agent.main
+```
+
+On Windows, install the requirements in the same environment. Clipboard monitoring uses the Windows clipboard; USB monitoring currently detects removable-drive connection and removal.
+
+## Current prototype limits
+
+- USB file-copy/extraction detection and USB blocking are not implemented yet; the current USB channel detects device connection changes.
+- Clipboard decisions are detected and reported, but full OS-level prevention is not implemented yet.
+- Events are held in server memory and reset when the server restarts.
+- Policies are edited through the `PUT /api/v1/policies` endpoint; a policy editor in the dashboard can be added next.
+- Detection patterns are basic examples and need to be refined for the data types the project will protect.
+
+The project is intentionally kept small so these capabilities can be built incrementally.

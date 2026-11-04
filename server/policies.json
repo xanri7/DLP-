@@ -1,4 +1,19 @@
 {
   "policy_version": 1,
-  "policies": []
+  "policies": [
+    {
+      "id": "POL-001",
+      "name": "Warn on sensitive clipboard data",
+      "enabled": true,
+      "channel": "clipboard",
+      "action": "WARN"
+    },
+    {
+      "id": "POL-002",
+      "name": "Warn on USB activity",
+      "enabled": true,
+      "channel": "usb",
+      "action": "WARN"
+    }
+  ]
 }
