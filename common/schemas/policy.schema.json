@@ -2,6 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "DLP Policy Document",
   "type": "object",
+  "additionalProperties": false,
   "required": [
     "policy_version",
     "policies"
@@ -15,6 +16,7 @@
       "type": "array",
       "items": {
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "id",
           "name",
@@ -51,10 +53,8 @@
               "BLOCK"
             ]
           }
-        },
-        "additionalProperties": false
+        }
       }
     }
-  },
-  "additionalProperties": false
+  }
 }
