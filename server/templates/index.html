@@ -3,14 +3,33 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>DLP Dashboard</title>
+  <title>DLP Control Center</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
+  <header class="topbar"><div><span class="eyebrow">ENDPOINT SECURITY</span><h1>DLP Control Center</h1></div><span class="server-state">Server console</span></header>
   <main>
-    <h1>DLP Dashboard</h1>
-    <p>The dashboard UI is a placeholder. Event and policy views are not implemented yet.</p>
-    <section id="events" aria-live="polite">No events loaded.</section>
+    <section class="stats">
+      <article class="panel"><span class="muted">Policy version</span><strong id="policy-version">—</strong></article>
+      <article class="panel"><span class="muted">Active policies</span><strong id="policy-count">—</strong></article>
+      <article class="panel"><span class="muted">Recent incidents</span><strong id="event-count">—</strong></article>
+    </section>
+    <section class="panel">
+      <div class="section-heading"><div><span class="eyebrow">CENTRAL CONFIGURATION</span><h2>Policy management</h2></div></div>
+      <form id="policy-form" class="policy-form">
+        <label>Policy name<input id="policy-name" required maxlength="100" placeholder="Block sensitive USB data"></label>
+        <label>Channel<select id="policy-channel"><option value="usb">USB</option><option value="clipboard">Clipboard</option></select></label>
+        <label>Minimum severity<select id="policy-severity"><option value="high">High</option><option value="critical">Critical</option><option value="medium">Medium</option><option value="low">Low</option></select></label>
+        <label>Action<select id="policy-action"><option>BLOCK</option><option>WARN</option><option>ALLOW</option></select></label>
+        <button type="submit">Create policy</button>
+      </form>
+      <p id="policy-message" class="muted" role="status"></p>
+      <div class="table-wrap"><table><thead><tr><th>Policy</th><th>Channel</th><th>Condition</th><th>Action</th><th>Status</th><th></th></tr></thead><tbody id="policies"><tr><td colspan="6">Loading policies…</td></tr></tbody></table></div>
+    </section>
+    <section class="panel">
+      <div class="section-heading"><div><span class="eyebrow">ENDPOINT ACTIVITY</span><h2>Recent incidents</h2></div></div>
+      <div id="events" class="empty-state">Event API is not connected yet.</div>
+    </section>
   </main>
   <script src="{{ url_for('static', filename='js/dashboard.js') }}" defer></script>
 </body>
