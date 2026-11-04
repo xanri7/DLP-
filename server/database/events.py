@@ -1,1 +1,1 @@
-"""TODO: Placeholder for SQLite event persistence."""
+"""Placeholder for server-side event persistence."""
