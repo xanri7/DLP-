@@ -1,25 +1,24 @@
 # Architecture
 
-## Components
+## Ownership
+- The **Server** owns policy creation, updates, deletion/disablement, and authoritative storage.
+- The **Agent** stores only a local cache of the latest valid policy document.
+- The dashboard communicates with the Server API; it does not communicate directly with agents.
 
-- **Agent:** observes supported file events and coordinates the DLP pipeline.
-- **Detection:** inspects supported file content and returns normalized findings.
-- **Policy:** maps context and findings to `ALLOW`, `WARN`, or `BLOCK`.
-- **Enforcement:** applies a decision through a specific tested control.
-- **Server:** Flask API, local event persistence, and dashboard delivery.
-- **Common:** shared schemas and stable decision/status values.
+## Agent flow
+1. A channel adapter observes an activity (clipboard or USB).
+2. Detection inspects metadata/content locally and returns findings.
+3. The policy engine evaluates the activity against the cached policies.
+4. Enforcement applies the decision where supported.
+5. A normalized event is sent to the server. Raw sensitive content must never be included.
 
-## Communication
+## Policy synchronization
+The agent checks the server policy version, downloads policies only when changed, validates the document, and atomically replaces its cache. If the server is unavailable, it uses the last valid cache.
 
-Detection, policy, and enforcement are Python modules called by the agent. The agent sends event records to the server over HTTP using JSON. The dashboard calls the server API; it does not call agent internals directly.
+## Extensibility
+Each monitoring channel implements the shared channel adapter interface. Future channels (for example email or file transfer) should not require changes to the policy store or event contract.
 
-## Shared event contract
-
-An event should include an event ID, agent ID, file name, file hash, detection findings, policy decision, and enforcement status. Do not include raw sensitive values or file contents in logs.
-
-Allowed decisions: `ALLOW`, `WARN`, `BLOCK`.
-Allowed enforcement statuses: `SUCCESS`, `FAILED`, `NOT_REQUIRED`.
-
-## Current limitations
-
-The scaffold does not yet provide full monitoring, content inspection, event persistence, or upload blocking. A file watcher alone does not stop uploads through arbitrary applications. Enforcement must be tied to a supported transfer path or OS control and tested independently.
+## Branch ownership
+- `main`: shared baseline, contracts, and architecture.
+- `Agent`: Windows endpoint agent skeleton.
+- `Server`: Flask API, policy store, event storage, and dashboard skeleton.

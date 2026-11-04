@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "DLP Event",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "event_id",
+    "agent_id",
+    "channel",
+    "timestamp",
+    "event_type",
+    "findings",
+    "decision",
+    "policy_id",
+    "enforcement_status"
+  ],
+  "properties": {
+    "event_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "agent_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "channel": {
+      "enum": [
+        "clipboard",
+        "usb"
+      ]
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "event_type": {
+      "type": "string",
+      "minLength": 1
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "severity",
+          "count"
+        ],
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "severity": {
+            "enum": [
+              "low",
+              "medium",
+              "high",
+              "critical"
+            ]
+          },
+          "count": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      }
+    },
+    "decision": {
+      "enum": [
+        "ALLOW",
+        "WARN",
+        "BLOCK"
+      ]
+    },
+    "policy_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "enforcement_status": {
+      "enum": [
+        "SUCCESS",
+        "FAILED",
+        "NOT_REQUIRED"
+      ]
+    }
+  }
+}
