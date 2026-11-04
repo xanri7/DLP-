@@ -1,1 +1,0 @@
-"""Agent registration/status routes placeholder."""

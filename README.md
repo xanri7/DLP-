@@ -1,16 +1,43 @@
 # DLP
 
-A lightweight, extensible Data Loss Prevention system.
+A small Data Loss Prevention project with two parts:
 
-## Components
-- **Agent**: Windows endpoint monitoring for clipboard and USB activity.
-- **Server**: Central policy management, event ingestion, and web dashboard.
-- **Shared contracts**: JSON schemas and API definitions used by both components.
+- **Agent** — runs on Windows and monitors clipboard and USB activity.
+- **Server** — manages policies and provides the web dashboard.
 
-The server is the source of truth for policies. Agents keep a validated local cache and can continue enforcing the last valid policy set while offline.
+The server is the source of truth for policies. The agent keeps a local JSON cache so it can use the latest valid policies while offline.
 
-## Current scope
-Clipboard monitoring and USB extraction are the initial channels. New channels should be added through independent adapters.
+## Project structure
 
-## Development
-See [docs/architecture.md](docs/architecture.md). The `Agent` and `Server` branches contain the component skeletons.
+```text
+agent/
+  main.py
+  clipboard.py
+  usb.py
+  policy_cache.py
+server/
+  app.py
+  policies.json
+  templates/
+    index.html
+  static/
+    style.css
+    app.js
+requirements.txt
+```
+
+## Setup
+
+```bash
+python -m venv .venv
+# Activate the virtual environment
+pip install -r requirements.txt
+```
+
+Run the server:
+
+```bash
+python -m server.app
+```
+
+Clipboard and USB monitoring are initial development targets. Additional monitoring channels can be added as separate agent modules.

@@ -1,7 +1,11 @@
-"""Agent entry point placeholder."""
+"""Windows endpoint agent entry point."""
+
 
 def main():
-    raise NotImplementedError("Agent runtime is not implemented yet")
+    # TODO: start clipboard and USB monitoring.
+    # TODO: load cached policies and synchronize with the server.
+    pass
+
 
 if __name__ == "__main__":
     main()

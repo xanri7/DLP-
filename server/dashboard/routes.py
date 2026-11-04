@@ -1,1 +1,0 @@
-"""Web dashboard routes placeholder."""
