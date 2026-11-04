@@ -1,1 +1,1 @@
-"""Placeholder for shared constants and data-contract definitions."""
+"""Placeholder for shared data contracts."""
