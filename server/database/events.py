@@ -1,1 +1,1 @@
-"""Placeholder for server-side event persistence."""
+"""Placeholder for event persistence."""
