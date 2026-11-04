@@ -1,1 +1,1 @@
-"""TODO: Placeholder for authoritative JSON policy storage."""
+"""Placeholder for the server-side JSON policy store."""
