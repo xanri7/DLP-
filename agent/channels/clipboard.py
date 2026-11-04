@@ -1,18 +1,5 @@
-"""Poll the Windows clipboard and pass changed text to a callback."""
+"""TODO: Clipboard monitoring channel.
 
-import time
-
-import pyperclip
-
-
-def monitor(on_text, interval=1.0):
-    previous = None
-    while True:
-        try:
-            current = pyperclip.paste()
-            if current and current != previous:
-                previous = current
-                on_text(current)
-        except Exception as error:
-            print(f"[clipboard] {error}")
-        time.sleep(interval)
+Define the channel interface and event metadata expected by the Agent.
+No clipboard monitoring is implemented yet.
+"""

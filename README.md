@@ -1,41 +1,29 @@
-# DLP
+# DLP System
 
-A first prototype of a Data Loss Prevention system.
+> Project scaffold only. No application functionality is implemented yet.
 
-## Components
+## Architecture placeholders
 
-- **Agent:** monitors clipboard changes and removable-drive connection events on Windows.
-- **Detection:** checks clipboard text locally for basic sensitive-data patterns. Raw content is not sent to the server.
-- **Policy:** downloads policies from the server and keeps a local JSON cache for offline use.
-- **Server:** stores policies, receives agent events, and serves a basic dashboard.
+- **Agent:** Windows endpoint component. Future responsibilities: channel monitoring, local detection, policy caching, enforcement, and event reporting.
+- **Server:** Central Flask-based web application. Future responsibilities: policy management, agent communication, event ingestion, and dashboard delivery.
+- **Common:** Shared contracts and naming conventions used by both Agent and Server.
+- **Dashboard:** Browser-based interface served by the Server. Administrators will open it using the Server's URL.
+- **Event database:** Server-side persistent storage for normalized event metadata. Raw sensitive content should not be transmitted or stored.
 
-## Run the server
+## Planned communication
 
-```bash
-python -m venv .venv
-pip install -r requirements.txt
-python -m server.app
-```
+- Agent periodically polls the Server for the latest policy version.
+- Server returns updated policies only when the Agent's cached version is outdated.
+- Agent stores the received policy document in its local cache.
+- Agent submits normalized event metadata to the Server.
+- Server stores events in its database and exposes them to the dashboard.
 
-Open http://127.0.0.1:5000.
+## Planned API placeholders
 
-## Run the agent
+- `GET /api/v1/policies` — retrieve the current policy document or updates.
+- `POST /api/v1/events` — submit an event from an Agent.
+- `GET /api/v1/events` — retrieve events for the dashboard.
 
-In a second terminal:
+## Current status
 
-```bash
-set DLP_SERVER_URL=http://127.0.0.1:5000
-python -m agent.main
-```
-
-On Windows, install the requirements in the same environment. Clipboard monitoring uses the Windows clipboard; USB monitoring currently detects removable-drive connection and removal.
-
-## Current prototype limits
-
-- USB file-copy/extraction detection and USB blocking are not implemented yet; the current USB channel detects device connection changes.
-- Clipboard decisions are detected and reported, but full OS-level prevention is not implemented yet.
-- Events are held in server memory and reset when the server restarts.
-- Policies are edited through the `PUT /api/v1/policies` endpoint; a policy editor in the dashboard can be added next.
-- Detection patterns are basic examples and need to be refined for the data types the project will protect.
-
-The project is intentionally kept small so these capabilities can be built incrementally.
+This repository contains structure and TODO placeholders only. Implementations, database schema, polling logic, API routes, monitoring, detection, enforcement, and dashboard behavior are intentionally left for development.

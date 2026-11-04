@@ -1,8 +1,1 @@
-__pycache__/
-*.py[cod]
-.venv/
-venv/
-.env
-.pytest_cache/
-agent/policies_cache.json
-server/policies.json.tmp
+# TODO: Add generated files, local caches, databases, and environment files to ignore.

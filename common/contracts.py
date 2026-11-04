@@ -1,5 +1,6 @@
-"""Small shared constants used by the agent and server."""
+"""TODO: Shared Agent/Server contracts.
 
-API_PREFIX = "/api/v1"
-CHANNELS = ("clipboard", "usb")
-DECISIONS = ("ALLOW", "WARN", "BLOCK")
+Define shared channel identifiers, decision values, event structure, policy
+document structure, and API version/path conventions here. Keep business
+logic out of this package so both components can depend on the same formats.
+"""
