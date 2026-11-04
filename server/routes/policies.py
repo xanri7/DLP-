@@ -1,1 +1,1 @@
-"""TODO: Placeholder for policy REST API routes."""
+"""Placeholder for policy management and synchronization API routes."""
