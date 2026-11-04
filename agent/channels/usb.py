@@ -1,14 +1,11 @@
-"""USB extraction channel; Windows implementation is pending."""
-from .base import BaseChannel
+"""USB extraction channel adapter placeholder."""
+from .base import ChannelAdapter
 
-class USBChannel(BaseChannel):
-    name = "usb"
+class USBAdapter(ChannelAdapter):
+    channel_name = "usb"
 
-    def start(self) -> None:
-        raise NotImplementedError("Implement Windows removable-drive monitoring.")
+    def start(self, on_activity):
+        raise NotImplementedError("Windows USB monitoring is a future implementation step")
 
-    def stop(self) -> None:
-        raise NotImplementedError
-
-    def handle_activity(self, activity: dict) -> None:
-        raise NotImplementedError
+    def stop(self):
+        pass

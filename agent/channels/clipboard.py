@@ -1,14 +1,11 @@
-"""Clipboard monitoring channel; Windows implementation is pending."""
-from .base import BaseChannel
+"""Windows clipboard channel adapter placeholder."""
+from .base import ChannelAdapter
 
-class ClipboardChannel(BaseChannel):
-    name = "clipboard"
+class ClipboardAdapter(ChannelAdapter):
+    channel_name = "clipboard"
 
-    def start(self) -> None:
-        raise NotImplementedError("Implement Windows clipboard monitoring.")
+    def start(self, on_activity):
+        raise NotImplementedError("Windows clipboard monitoring is a future implementation step")
 
-    def stop(self) -> None:
-        raise NotImplementedError
-
-    def handle_activity(self, activity: dict) -> None:
-        raise NotImplementedError
+    def stop(self):
+        pass

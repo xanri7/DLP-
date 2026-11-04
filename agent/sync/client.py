@@ -1,13 +1,11 @@
-"""HTTPS synchronization client interface."""
-class SyncClient:
-    def check_policy_version(self) -> int:
+"""Server policy-version check, policy download, and event reporting client."""
+
+class ServerClient:
+    def get_policy_version(self):
         raise NotImplementedError
 
-    def download_policies(self, version: int) -> dict:
+    def download_policies(self):
         raise NotImplementedError
 
-    def upload_events(self, events: list[dict]) -> None:
-        raise NotImplementedError
-
-    def send_heartbeat(self) -> None:
+    def submit_event(self, event):
         raise NotImplementedError

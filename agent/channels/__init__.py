@@ -1,1 +1,1 @@
-"""Pluggable Windows endpoint monitoring channels."""
+"""Monitoring channel adapters."""

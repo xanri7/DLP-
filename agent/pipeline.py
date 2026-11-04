@@ -1,6 +1,4 @@
-"""Coordinates inspection, policy evaluation, and enforcement."""
+"""Connect channel adapters, detection, policy, enforcement, and reporting."""
 
-
-def process_file(path, scanner, policy_engine, enforcement):
-    """Run one file through the DLP pipeline."""
+def handle_activity(activity):
     raise NotImplementedError

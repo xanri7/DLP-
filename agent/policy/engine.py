@@ -1,6 +1,4 @@
-"""Maps file context and detection findings to ALLOW, WARN, or BLOCK."""
+"""Evaluate activity and findings against cached policies."""
 
-
-def evaluate_policy(context, detection_result):
-    """Return a normalized policy result using common.schemas."""
+def evaluate(activity, findings, policy_document):
     raise NotImplementedError

@@ -1,6 +1,5 @@
-"""File inspection entry point."""
+"""Local sensitive-data scanner placeholder."""
 
-
-def inspect_file(path):
-    """Inspect a supported file and return the shared detection-result schema."""
+def scan(activity):
+    """Return normalized findings; do not transmit raw sensitive content."""
     raise NotImplementedError

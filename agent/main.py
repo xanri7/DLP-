@@ -1,10 +1,7 @@
-"""Entry point for the endpoint agent.
+"""Agent entry point placeholder."""
 
-TODO: add configuration loading and start the selected monitoring adapter.
-"""
 def main():
-    raise NotImplementedError("Agent startup has not been implemented yet.")
-
+    raise NotImplementedError("Agent runtime is not implemented yet")
 
 if __name__ == "__main__":
     main()

@@ -1,18 +1,14 @@
-"""Common interface implemented by every monitoring channel."""
+"""Interface for pluggable monitoring channels."""
 from abc import ABC, abstractmethod
-from typing import Any
 
-class BaseChannel(ABC):
-    name: str
-
-    @abstractmethod
-    def start(self) -> None:
-        """Start channel monitoring."""
+class ChannelAdapter(ABC):
+    channel_name: str
 
     @abstractmethod
-    def stop(self) -> None:
-        """Stop channel monitoring."""
+    def start(self, on_activity):
+        """Start monitoring and pass normalized activity metadata to callback."""
+        raise NotImplementedError
 
     @abstractmethod
-    def handle_activity(self, activity: dict[str, Any]) -> None:
-        """Normalize and forward activity to the shared DLP pipeline."""
+    def stop(self):
+        raise NotImplementedError
