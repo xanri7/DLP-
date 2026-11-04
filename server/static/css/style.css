@@ -1,8 +1,23 @@
-/* Minimal dashboard placeholder styles. */
-body {
-  font-family: system-ui, sans-serif;
-  line-height: 1.5;
-  margin: 2rem auto;
-  max-width: 60rem;
-  padding: 0 1rem;
-}
+:root{font-family:Inter,ui-sans-serif,system-ui,sans-serif;color:#172334;background:#f3f6fa;font-synthesis:none}
+*{box-sizing:border-box}
+body{margin:0}
+.topbar{background:#14263d;color:#fff;padding:28px max(24px,calc((100% - 1120px)/2));display:flex;align-items:center;justify-content:space-between}
+h1{margin:5px 0 0;font-size:28px}h2{margin:5px 0 0;font-size:20px}
+.eyebrow{font-size:10px;letter-spacing:.14em;font-weight:800;color:#7a91ac}
+.server-state{font-size:12px;color:#b8c9dc}
+main{max-width:1120px;margin:28px auto;padding:0 20px;display:grid;gap:20px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.panel{background:#fff;border:1px solid #e0e7ef;border-radius:13px;padding:22px;box-shadow:0 5px 20px rgba(22,42,65,.035)}
+.stats strong{display:block;font-size:30px;margin-top:8px}.muted{color:#738197;font-size:13px}
+.section-heading{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.policy-form{display:grid;grid-template-columns:2fr 1fr 1fr 1fr auto;gap:12px;align-items:end}
+label{display:grid;gap:7px;font-size:12px;font-weight:700;color:#526176}
+input,select{width:100%;border:1px solid #d7e0ea;border-radius:7px;padding:10px;background:#fff;color:#172334;font:inherit;font-size:13px}
+button{border:0;border-radius:7px;padding:11px 15px;background:#2468b2;color:white;font-weight:700;cursor:pointer;white-space:nowrap}
+button:hover{filter:brightness(.94)}.button-secondary{background:#edf2f7;color:#34465d;padding:7px 10px;font-size:11px}
+.table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;text-align:left;font-size:13px}
+th{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:#8090a4}
+th,td{padding:13px 10px;border-bottom:1px solid #edf1f5}td small{display:block;color:#8a98a9;margin-top:3px}
+.action{font-size:10px;font-weight:800;padding:5px 8px;border-radius:20px}.action.block{background:#fde9e9;color:#b33131}.action.warn{background:#fff3d9;color:#936313}.action.allow{background:#e4f5eb;color:#237548}
+.empty-state{color:#8794a5;font-size:13px;padding:14px 0;white-space:pre-line}
+@media(max-width:850px){.policy-form{grid-template-columns:repeat(2,1fr)}.stats{grid-template-columns:1fr}}
