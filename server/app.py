@@ -1,1 +1,1 @@
-"""TODO: Placeholder for Flask app factory and dashboard route."""
+"""Placeholder for the Flask application and web dashboard entry point."""
