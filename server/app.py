@@ -1,1 +1,1 @@
-"""Placeholder for the Flask application and web dashboard entry point."""
+"""Placeholder for Flask application and dashboard entry point."""
