@@ -1,1 +1,1 @@
-"""Placeholder for server-side policy CRUD and version management."""
+"""Placeholder for server-side policy management."""
