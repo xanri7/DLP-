@@ -1,37 +1,67 @@
-# DLP architecture
+# DLP architecture and shared contracts
 
-## Responsibilities
+## Components
 
-- **Windows agent:** runs monitoring channels, detection, local policy evaluation, enforcement, and synchronization.
-- **Linux server:** owns policy creation, editing, versioning, and central policy storage; receives events and serves the dashboard.
-- **Agent policy cache:** stores the latest validated policy snapshot for offline use. The agent does not author or manage policies.
+- **Windows Agent:** clipboard and USB channels, detection, local policy evaluation, enforcement, policy cache, and synchronization.
+- **Linux Server:** authoritative JSON policy management, REST API, event persistence, agent status, and web dashboard.
+- **Web Dashboard:** HTML/CSS/JavaScript served by Flask. It talks only to the server REST API; it does not connect directly to endpoint agents.
+- **Common contracts:** `common/schemas.py` and the JSON Schema files define the shared payload formats and allowed values.
 
-## Initial monitoring channels
+## Policy authority and synchronization
 
-- `clipboard`: monitor clipboard text changes and inspect content for sensitive information.
-- `usb`: detect removable drives and inspect file-copy activity targeting them.
+The server is the only policy authority. Administrators create and edit policies in the dashboard. The server validates and stores a JSON document with an incrementing `policy_version`. The agent periodically checks the version, downloads a newer document, validates it, and replaces its local cache. If offline, the agent continues with its last valid cache and queues events for later upload.
 
-Each channel implements the shared interface in `agent/channels/base.py` and forwards normalized activity to the same detection → policy → enforcement → event pipeline. Future channels (email or browser uploads, for example) should add adapters rather than duplicate that pipeline.
+Example policy document:
 
-## Policy synchronization
+```json
+{
+  "policy_version": 1,
+  "policies": [
+    {
+      "id": "POL-001",
+      "name": "Block high-sensitivity USB transfers",
+      "enabled": true,
+      "channel": "usb",
+      "conditions": {"sensitivity": ["high", "critical"]},
+      "action": "BLOCK"
+    }
+  ]
+}
+```
 
-1. An administrator changes a policy through the server dashboard/API.
-2. The server persists the change and increments the policy version.
-3. The agent periodically checks the current version over HTTPS.
-4. If a newer version exists, the agent downloads and validates the policy snapshot.
-5. The agent replaces its local cache only after successful validation and persistence.
-6. When offline, the agent uses its last valid cache and queues events for later upload.
+## Shared vocabulary
+
+- Channels: `clipboard`, `usb`
+- Decisions: `ALLOW`, `WARN`, `BLOCK`
+- Severities: `low`, `medium`, `high`, `critical`
+- Enforcement statuses: `SUCCESS`, `FAILED`, `NOT_REQUIRED`
+- Timestamps: ISO 8601 UTC strings
+- API prefix: `/api/v1/`
+- Payload encoding: UTF-8 JSON
+
+Do not invent alternate spellings or casing in individual modules. Every channel emits the same normalized event structure.
+
+## Event contract
+
+Every event contains `event_id`, `agent_id`, `channel`, `timestamp`, `event_type`, `findings`, `decision`, `policy_id`, and `enforcement_status`. Findings contain a type, severity, and count. Do not send raw clipboard text or full sensitive file contents to the server.
 
 ## API outline
 
 - `GET /api/v1/policies/version` — current policy version.
-- `GET /api/v1/policies` — active policy snapshot for agents.
-- `POST /api/v1/policies` — create policy (administrator authorization required).
+- `GET /api/v1/policies` — current JSON policy document for agents.
+- `POST /api/v1/policies` — create policy from dashboard.
 - `PUT /api/v1/policies/{id}` — update policy.
-- `DELETE /api/v1/policies/{id}` — disable policy.
-- `POST /api/v1/events` — ingest agent events.
-- `POST /api/v1/agents/heartbeat` — update agent status.
+- `DELETE /api/v1/policies/{id}` — disable policy (soft delete).
+- `POST /api/v1/events` — ingest agent event.
+- `GET /api/v1/events` — list recent events for dashboard.
+- `POST /api/v1/agents/heartbeat` — agent heartbeat (planned).
 
-## Security and scope
+## Dashboard
 
-Use HTTPS, authenticate agents, validate policy schemas and versions, protect the local cache, and avoid logging clipboard contents or matched sensitive values. Monitoring/detection is not the same as enforcement: each Windows control must be implemented and tested for its specific operation. These channel and service files are scaffolding, not completed monitoring or enforcement implementations.
+The Flask server serves the dashboard at `/`. HTML provides the page structure, CSS styles it, and JavaScript calls the REST API to display and manage policies and review events. The browser must not access the agent's local store directly.
+
+## Security and implementation status
+
+Use HTTPS and authenticate both agents and administrators before deployment. The current policy CRUD endpoints are a development scaffold and do not yet enforce authentication or authorization; do not expose them to an untrusted network. Protect the local policy cache and validate downloaded documents before replacing it.
+
+Monitoring/detection is not the same as enforcement: each Windows control must be implemented and tested for its specific operation. The clipboard and USB channel files remain integration points until their Windows monitoring and enforcement code is completed.
