@@ -1,1 +1,1 @@
-"""TODO: Placeholder for event ingestion and query routes."""
+"""Placeholder for event ingestion and retrieval API routes."""
