@@ -1,1 +1,1 @@
-"""Placeholder for policy management and synchronization API routes."""
+"""Placeholder for policy API routes."""
