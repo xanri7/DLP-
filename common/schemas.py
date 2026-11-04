@@ -1,1 +1,1 @@
-"""TODO: Define shared DLP constants and payload validators here."""
+"""Placeholder for shared constants and data-contract definitions."""
