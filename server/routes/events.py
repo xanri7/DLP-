@@ -1,1 +1,1 @@
-"""Placeholder for event ingestion and retrieval API routes."""
+"""Placeholder for event API routes."""
