@@ -1,1 +1,2 @@
 # TODO: Add generated files, local caches, databases, and environment files to ignore.
+.venv
