@@ -1,1 +1,16 @@
-# TODO: Add generated files, local caches, databases, and environment files to ignore.
+# Python cache files
+pycache/
+*.pyc
+
+# Local SQLite databases
+*.db
+*.db-shm
+*.db-wal
+
+# Python virtual environments
+.venv/
+venv/
+
+# Environment secrets
+.env
+.env.*
