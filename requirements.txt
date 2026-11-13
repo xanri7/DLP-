@@ -1,2 +1,6 @@
-# Clipboard monitoring dependency
+# NEON SENTINEL DLP dependencies
+#
+# Server, database, detection, and tests currently use Python 3.10+ standard library.
+# Clipboard monitoring is the only component that currently requires an external package.
+
 pyperclip>=1.9.0
