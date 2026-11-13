@@ -4,7 +4,6 @@ Reads clipboard text and creates structured events for the Agent.
 Raw clipboard content stays local for detection.
 """
 
-import logging
 import time
 import uuid
 from datetime import datetime, timezone
@@ -12,8 +11,6 @@ from datetime import datetime, timezone
 import pyperclip
 
 from common.contracts import ChannelEvent
-
-logger = logging.getLogger(__name__)
 
 
 def read_clipboard():
@@ -35,7 +32,8 @@ def create_clipboard_event(content):
     return event
 
 
-def main():
+def monitor_clipboard():
+    """Yield an event whenever clipboard text changes."""
     prev_clip = ""
     while True:
         time.sleep(2.5)
@@ -43,18 +41,15 @@ def main():
         if current_clip != prev_clip:
             if current_clip:
                 event = create_clipboard_event(current_clip)
-                logger.info(
-                    "Clipboard event detected: event_id=%s content_length=%d",
-                    event.event_id,
-                    event.content_length,
-                )
+                yield event
             prev_clip = current_clip
 
 
+def main():
+    """Allow this channel to be run independently for basic testing."""
+    for event in monitor_clipboard():
+        print(f"Clipboard event created: {event.event_id}")
+
+
 if __name__ == '__main__':
-    logging.basicConfig(
-        level=logging.INFO,
-        datefmt="%Y-%m-%d %H:%M:%S",
-        format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
-    )
     main()
