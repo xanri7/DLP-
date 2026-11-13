@@ -1,5 +1,2 @@
-"""TODO: Server application entry point.
-
-Create and configure the web application, register API routes, serve the
-browser-based dashboard, and connect server-side services. No app is built yet.
-"""
+"""Flask/UI composition is intentionally deferred to a later phase."""
+PHASE="PHASE_1_CORE"

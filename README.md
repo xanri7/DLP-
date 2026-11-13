@@ -1,29 +1,15 @@
-# DLP System
+# NEON SENTINEL DLP — Phase 1
+Python 3.10+. Standard library only.
 
-> Project scaffold only. No application functionality is implemented yet.
+Initialize: `python run.py init-db`
+Test: `python -m unittest discover -s tests -v`
 
-## Architecture placeholders
+The database starts empty. Tests use isolated temporary databases.
+This phase implements database, policies, rules, policy evaluation, event metadata,
+device inventory, incidents, administrator authentication primitives and audit logs.
+It does not implement Flask routes, browser UI, Agent communication, endpoint monitoring,
+or actual enforcement. The policy engine evaluates structured metadata only; raw file
+or clipboard contents are never accepted or stored.
 
-- **Agent:** Windows endpoint component. Future responsibilities: channel monitoring, local detection, policy caching, enforcement, and event reporting.
-- **Server:** Central Flask-based web application. Future responsibilities: policy management, agent communication, event ingestion, and dashboard delivery.
-- **Common:** Shared contracts and naming conventions used by both Agent and Server.
-- **Dashboard:** Browser-based interface served by the Server. Administrators will open it using the Server's URL.
-- **Event database:** Server-side persistent storage for normalized event metadata. Raw sensitive content should not be transmitted or stored.
-
-## Planned communication
-
-- Agent periodically polls the Server for the latest policy version.
-- Server returns updated policies only when the Agent's cached version is outdated.
-- Agent stores the received policy document in its local cache.
-- Agent submits normalized event metadata to the Server.
-- Server stores events in its database and exposes them to the dashboard.
-
-## Planned API placeholders
-
-- `GET /api/v1/policies` — retrieve the current policy document or updates.
-- `POST /api/v1/events` — submit an event from an Agent.
-- `GET /api/v1/events` — retrieve events for the dashboard.
-
-## Current status
-
-This repository contains structure and TODO placeholders only. Implementations, database schema, polling logic, API routes, monitoring, detection, enforcement, and dashboard behavior are intentionally left for development.
+Rule priority is ascending (1 is highest). First matching enabled rule wins.
+If none matches, the policy's default action is returned.
