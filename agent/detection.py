@@ -45,14 +45,26 @@ def analyze_event(event):
     if _PATTERNS["EMAIL_ADDRESS"].search(content):
         findings.append("EMAIL_ADDRESS")
 
-    if _PATTERNS["PHONE_NUMBER"].search(content):
-        findings.append("PHONE_NUMBER")
+    valid_card_spans = []
+    for match in _PATTERNS["CREDIT_CARD"].finditer(content):
+        if _passes_luhn(match.group()):
+            valid_card_spans.append(match.span())
 
-    if any(
-        _passes_luhn(match.group())
-        for match in _PATTERNS["CREDIT_CARD"].finditer(content)
-    ):
+    if valid_card_spans:
         findings.append("CREDIT_CARD")
+
+    phone_found = False
+    for match in _PATTERNS["PHONE_NUMBER"].finditer(content):
+        overlaps_credit_card = any(
+            match.start() < card_end and match.end() > card_start
+            for card_start, card_end in valid_card_spans
+        )
+        if not overlaps_credit_card:
+            phone_found = True
+            break
+
+    if phone_found:
+        findings.append("PHONE_NUMBER")
 
     return {
         "event_id": event.event_id,
